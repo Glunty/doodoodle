@@ -1,1 +1,1 @@
-# doodoodle
+[![Build Status](https://travis-ci.org/Glunty/doodoodle.svg?branch=master)](https://travis-ci.org/Glunty/doodoodle)
