@@ -7,6 +7,9 @@ spring:
   jackson:
     serialization:
       INDENT_OUTPUT: true
+  data:
+    mongodb:
+      database: DooDoodle
 
 jwt:
   header: Authorization

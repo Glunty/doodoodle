@@ -7,6 +7,9 @@
 hs_err_pid*
 /bin/
 
+#build generated files
+build/
+
 # IDEA
 .idea
 .iml
