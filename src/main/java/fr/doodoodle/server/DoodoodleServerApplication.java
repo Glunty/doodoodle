@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.core.MongoClientFactoryBean;
 
 @SpringBootApplication
 @EnableOAuth2Sso
-@RestController
 public class DoodoodleServerApplication {
 
     public static void main(String[] args) {
