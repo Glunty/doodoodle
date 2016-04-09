@@ -14,9 +14,10 @@ public class UserRS {
     @Autowired
     private UserAS userAS;
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(path = "/create", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public void create(@RequestParam(value="name") String name) {
         userAS.createUser(name);
     }
+
 }
