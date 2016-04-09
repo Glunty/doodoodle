@@ -2,10 +2,13 @@ package fr.doodoodle.server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.core.MongoClientFactoryBean;
 
 @SpringBootApplication
+@EnableOAuth2Sso
+@RestController
 public class DoodoodleServerApplication {
 
     public static void main(String[] args) {
