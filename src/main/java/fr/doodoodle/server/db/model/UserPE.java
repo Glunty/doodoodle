@@ -28,5 +28,6 @@ public class UserPE  {
     private Date lastPasswordResetDate;
 
     private List<Long> groups;
-    private List<Long> activities;
+    private List<ActivityPE> activities;
+    private List<DisponibilityPE> disponibilities;
 }
