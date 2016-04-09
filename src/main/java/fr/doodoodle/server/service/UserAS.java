@@ -1,7 +1,7 @@
-package service;
+package fr.doodoodle.server.service;
 
-import db.business.UserRepository;
-import db.model.UserPE;
+import fr.doodoodle.server.db.business.UserRepository;
+import fr.doodoodle.server.db.model.UserPE;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

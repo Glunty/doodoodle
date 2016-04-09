@@ -1,9 +1,9 @@
-package rest;
+package fr.doodoodle.server.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import service.UserAS;
+import fr.doodoodle.server.service.UserAS;
 
 /**
  * Created by Florent on 09/04/2016.

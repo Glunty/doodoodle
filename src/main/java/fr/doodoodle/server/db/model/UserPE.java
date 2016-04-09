@@ -1,4 +1,4 @@
-package db.model;
+package fr.doodoodle.server.db.model;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
