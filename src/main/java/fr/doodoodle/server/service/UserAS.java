@@ -3,6 +3,7 @@ package fr.doodoodle.server.service;
 import fr.doodoodle.server.db.business.UserRepository;
 import fr.doodoodle.server.db.model.UserPE;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,10 +13,14 @@ import org.springframework.stereotype.Service;
 public class UserAS {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    public UserPE createUser(String name){
+    public UserPE createUser(String email, String password){
         UserPE user = new UserPE();
-        user.setName(name);
+        user.setUsername(email);
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
         return userRepository.save(user);
     }
 }

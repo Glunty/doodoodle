@@ -3,6 +3,7 @@ package fr.doodoodle.server.db.model;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Date;
@@ -17,7 +18,8 @@ import java.util.List;
 public class UserPE  {
     @Id
     private String id;
-    private String name;
+
+    private String username;
     private String password;
     private String firstName;
     private String lastName;

@@ -20,8 +20,8 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        //FIXME Actually, the what is considered as username by spring is our email
-        UserPE user = userRepository.findByEmail(username);
+        //Dirty hack : actually, what is considered as username is our email
+        UserPE user = userRepository.findFirstByEmail(username);
         if (user == null) {
             throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
         } else {

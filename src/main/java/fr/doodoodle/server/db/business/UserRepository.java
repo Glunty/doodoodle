@@ -7,8 +7,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 /**
  * Created by Florent on 09/04/2016.
  */
-public interface UserRepository extends Repository<UserPE, Long> {
+public interface UserRepository extends Repository<UserPE, String> {
         UserPE save(UserPE user);
 
-        UserPE findByEmail(String email);
+        UserPE findFirstByEmail(String email);
 }
