@@ -1,9 +1,9 @@
 package fr.doodoodle.server.security;
 
+import fr.doodoodle.server.db.model.UserPE;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public final class JwtUserFactory {
@@ -11,17 +11,16 @@ public final class JwtUserFactory {
     private JwtUserFactory() {
     }
 
-    //TODO plug creation of a JWT user using User object
-    public static JwtUser create() {
+    public static JwtUser create(UserPE aUser) {
         return new JwtUser(
-                1l,
-                "Glunt",
-                "Thiebaud",
-                "Schwindenhammer",
-                "ett",
+                aUser.getId(),
+                aUser.getName(),
+                aUser.getFirstName(),
+                aUser.getLastName(),
+                aUser.getPassword(),
                 mapToGrantedAuthorities(),
                 true,
-                new Date()
+                aUser.getLastPasswordResetDate()
         );
     }
 
