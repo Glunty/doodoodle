@@ -11,5 +11,5 @@ import java.time.Period;
 public class ActivityPE {
     private Period period;
     private String name;
-    private String Type;
+    private ActivityTypePE activityType;
 }
