@@ -1,8 +1,11 @@
 package fr.doodoodle.server.rest;
 
+import fr.doodoodle.server.db.model.UserPE;
+import fr.doodoodle.server.service.exception.UserAlreadyExistsException;
 import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import fr.doodoodle.server.service.UserAS;
 
@@ -15,10 +18,10 @@ public class UserRS {
     @Autowired
     private UserAS userAS;
 
-    @RequestMapping(path = "/create", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestParam(value="email") String email, @RequestParam(value="password") String password) {
-        userAS.createUser(email, password);
+    public @ResponseBody void create(@RequestBody UserPE user) {
+        userAS.createUser(user);
     }
 
 }
