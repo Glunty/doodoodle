@@ -1,6 +1,7 @@
 package fr.doodoodle.server.db.model;
 
 import lombok.Data;
+import lombok.Singular;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -28,7 +29,10 @@ public class UserPE implements Serializable {
     private Boolean accountNotExpired;
     private Date lastPasswordResetDate;
 
-    private List<Long> groups;
+    @Singular
+    private List<String> groups;
+    @Singular
     private List<ActivityPE> activities;
+    @Singular
     private List<DisponibilityPE> disponibilities;
 }

@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import fr.doodoodle.server.service.UserAS;
 
+import java.util.List;
+
 /**
  * Created by Florent on 09/04/2016.
  */
@@ -22,6 +24,13 @@ public class UserRS {
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody void create(@RequestBody UserPE user) {
         userAS.createUser(user);
+    }
+
+    @RequestMapping(path = "/find", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
+    public @ResponseBody
+    List<UserPE> findUser(@RequestBody UserPE example) {
+        return userAS.findByExample(example);
     }
 
 }
