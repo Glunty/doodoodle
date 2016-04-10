@@ -3,11 +3,16 @@ package fr.doodoodle.server.rest;
 import fr.doodoodle.server.db.business.GroupRepository;
 import fr.doodoodle.server.db.model.GroupPE;
 import fr.doodoodle.server.db.model.UserPE;
+import fr.doodoodle.server.security.JwtTokenUtil;
+import fr.doodoodle.server.security.JwtUser;
 import fr.doodoodle.server.service.GroupAS;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -22,6 +27,12 @@ public class GroupRS {
 
     @Autowired
     private GroupAS groupAS;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    @Value("${jwt.header}")
+    private String tokenHeader;
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
@@ -72,5 +83,13 @@ public class GroupRS {
     @ResponseBody
     void removeUserFromGroup(@PathVariable String groupId, @RequestBody UserPE user) {
         groupAS.removeUserFromGroup(groupId, user.getId());
+    }
+
+    @RequestMapping(value = "/{groupId}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
+    public void removeCurrentUserFromGroup(@PathVariable String groupId, HttpServletRequest request) {
+        String token = request.getHeader(tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        groupAS.removeUserFromGroup(groupId, username);
     }
 }
