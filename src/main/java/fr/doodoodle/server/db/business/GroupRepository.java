@@ -1,7 +1,6 @@
 package fr.doodoodle.server.db.business;
 
 import fr.doodoodle.server.db.model.GroupPE;
-import fr.doodoodle.server.db.model.UserPE;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 

@@ -27,7 +27,7 @@ public class GroupAS {
     @Autowired
     private UserAS userAS;
 
-    public void removeUserFromGroup(String groupId, String userId){
+    public void removeUserFromGroup(String groupId, String userId) {
         GroupPE foundGroup = groupRepository.findOne(groupId);
         UserPE foundUser = userRepository.findOne(userId);
         if (foundGroup == null) {
@@ -36,25 +36,25 @@ public class GroupAS {
         if (foundUser == null) {
             throw new EntityNotFoundException("User with id " + userId + " not found");
         }
-            foundGroup.getMemberIds().remove(foundUser.getId());
-            foundUser.getGroups().remove(foundGroup.getId());
+        foundGroup.getMemberIds().remove(foundUser.getId());
+        foundUser.getGroups().remove(foundGroup.getId());
 
-            userRepository.save(foundUser);
-            if (foundGroup.getMemberIds().isEmpty()){
-                //Delete group if last member has quit
-                groupRepository.delete(foundGroup);
-            } else {
-                groupRepository.save(foundGroup);
-            }
+        userRepository.save(foundUser);
+        if (foundGroup.getMemberIds().isEmpty()) {
+            //Delete group if last member has quit
+            groupRepository.delete(foundGroup);
+        } else {
+            groupRepository.save(foundGroup);
+        }
     }
 
-    public void addUserToGroup(String groupId, String userId){
+    public void addUserToGroup(String groupId, String userId) {
         GroupPE foundGroup = findGroup(groupId);
         UserPE foundUser = findUser(userId);
-            foundGroup.getMemberIds().add(foundUser.getId());
-            foundUser.getGroups().add(foundGroup.getId());
-            groupRepository.save(foundGroup);
-            userRepository.save(foundUser);
+        foundGroup.getMemberIds().add(foundUser.getId());
+        foundUser.getGroups().add(foundGroup.getId());
+        groupRepository.save(foundGroup);
+        userRepository.save(foundUser);
     }
 
 
@@ -66,13 +66,13 @@ public class GroupAS {
 
     public List<GroupPE> listByUserId(String id) {
         List<GroupPE> groups = groupRepository.listByUserId(id);
-        groups.forEach(s->populateMembers(s));
+        groups.forEach(s -> populateMembers(s));
         return groups;
     }
 
     public List<GroupPE> listAll() {
         Iterable<GroupPE> groups = groupRepository.findAll();
-        groups.forEach(s->populateMembers(s));
+        groups.forEach(s -> populateMembers(s));
         return Lists.newArrayList(groups);
     }
 
@@ -92,7 +92,7 @@ public class GroupAS {
         return foundGroup;
     }
 
-    private void populateMembers(GroupPE groupPE){
-        groupPE.getMemberIds().forEach(s->groupPE.getMembers().add(userRepository.findOne(s)));
+    private void populateMembers(GroupPE groupPE) {
+        groupPE.getMemberIds().forEach(s -> groupPE.getMembers().add(userRepository.findOne(s)));
     }
 }
