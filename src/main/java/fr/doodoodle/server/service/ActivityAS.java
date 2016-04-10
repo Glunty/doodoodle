@@ -1,5 +1,8 @@
 package fr.doodoodle.server.service;
 
+import fr.doodoodle.server.db.business.UserRepository;
+import fr.doodoodle.server.db.model.ActivityPE;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -7,7 +10,12 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ActivityAS {
-    public void createActivity() {
-        //
+    @Autowired
+    UserAS userAS;
+
+    public void createActivity(){
+        ActivityPE getAllActivitiesForUser(String email){
+            userAS.
+        }
     }
 }

@@ -28,8 +28,8 @@ public class UserPE implements Serializable {
     private String email;
     private Boolean accountNotExpired;
     private Date lastPasswordResetDate;
-
     private List<String> groups;
+    List<ActivityTypePE> activityTypes;
     private List<ActivityPE> activities;
     private List<DisponibilityPE> disponibilities;
 
