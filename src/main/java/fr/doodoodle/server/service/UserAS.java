@@ -42,7 +42,7 @@ public class UserAS {
 
     public List<UserPE> findByExample(UserPE example) {
         if (example.getEmail() != null) {
-            return Arrays.asList(userRepository.findFirstByEmail(example.getEmail()));
+            return userRepository.findWithMailLike(example.getEmail());
         }
         if (example.getFirstName() != null) {
             return userRepository.listByFirstAndLastName(example.getFirstName(), example.getLastName());

@@ -12,6 +12,11 @@ import java.util.List;
 public interface UserRepository extends CrudRepository<UserPE, String> {
     UserPE findFirstByEmail(String email);
 
+
+
+    @Query("{ 'email' : { '$regex' : '.*?0.*' , '$options' : 'i'}}")
+    List<UserPE> findWithMailLike(String mail);
+
     @Query("{ 'firstName' : ?0, 'lastName' : ?1 }")
     List<UserPE> listByFirstAndLastName(String firstName, String lastName);
 }

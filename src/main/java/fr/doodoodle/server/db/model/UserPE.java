@@ -3,6 +3,7 @@ package fr.doodoodle.server.db.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.api.client.util.Lists;
+import com.google.api.client.util.Sets;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Florent on 09/04/2016.
@@ -31,15 +33,15 @@ public class UserPE implements Serializable {
     private Boolean accountNotExpired;
     private Date lastPasswordResetDate;
 
-    private List<String> groups;
+    private Set<String> groups;
     private List<ActivityPE> activities;
     private List<DisponibilityPE> disponibilities;
 
 
 
-    public List<String> getGroups() {
+    public Set<String> getGroups() {
         if (groups == null) {
-            groups = Lists.newArrayList();
+            groups = Sets.newHashSet();
         }
         return groups;
     }
