@@ -33,6 +33,7 @@ public class UserPE implements Serializable {
     private List<ActivityPE> activities;
     private List<DisponibilityPE> disponibilities;
 
+
     public List<String> getGroups() {
         if (groups == null) {
             groups = Lists.newArrayList();

@@ -5,7 +5,6 @@ import fr.doodoodle.server.db.business.GroupRepository;
 import fr.doodoodle.server.db.business.UserRepository;
 import fr.doodoodle.server.db.model.GroupPE;
 import fr.doodoodle.server.db.model.UserPE;
-import fr.doodoodle.server.rest.to.GroupTO;
 import fr.doodoodle.server.service.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,11 +36,11 @@ public class GroupAS {
         if (foundUser == null) {
             throw new EntityNotFoundException("User with id " + userId + " not found");
         }
-            foundGroup.getMembers().remove(foundUser.getId());
+            foundGroup.getMemberIds().remove(foundUser.getId());
             foundUser.getGroups().remove(foundGroup.getId());
 
             userRepository.save(foundUser);
-            if (foundGroup.getMembers().isEmpty()){
+            if (foundGroup.getMemberIds().isEmpty()){
                 //Delete group if last member has quit
                 groupRepository.delete(foundGroup);
             } else {
@@ -52,23 +51,29 @@ public class GroupAS {
     public void addUserToGroup(String groupId, String userId){
         GroupPE foundGroup = findGroup(groupId);
         UserPE foundUser = findUser(userId);
-            foundGroup.getMembers().add(foundUser.getId());
+            foundGroup.getMemberIds().add(foundUser.getId());
             foundUser.getGroups().add(foundGroup.getId());
             groupRepository.save(foundGroup);
             userRepository.save(foundUser);
     }
 
 
-    public GroupTO findById(String groupId) {
-        return mapToTO(groupRepository.findOne(groupId));
+    public GroupPE findById(String groupId) {
+        GroupPE group = groupRepository.findOne(groupId);
+        populateMembers(group);
+        return group;
     }
 
-    public List<GroupTO> listByUserId(String id) {
-        return mapToTO(groupRepository.listByUserId(id));
+    public List<GroupPE> listByUserId(String id) {
+        List<GroupPE> groups = groupRepository.listByUserId(id);
+        groups.forEach(s->populateMembers(s));
+        return groups;
     }
 
-    public List<GroupTO> listAll() {
-        return mapToTO(groupRepository.findAll());
+    public List<GroupPE> listAll() {
+        Iterable<GroupPE> groups = groupRepository.findAll();
+        groups.forEach(s->populateMembers(s));
+        return Lists.newArrayList(groups);
     }
 
     private UserPE findUser(String userId) {
@@ -87,26 +92,7 @@ public class GroupAS {
         return foundGroup;
     }
 
-    private List<GroupTO> mapToTO(Iterable<GroupPE> groupPEs){
-        List<GroupTO> tos = Lists.newArrayList();
-        groupPEs.forEach(s-> tos.add(mapToTO(s)));
-        return tos;
-    }
-
-    private List<GroupTO> mapToTO(List<GroupPE> groupPEs){
-        List<GroupTO> tos = Lists.newArrayList();
-        groupPEs.stream().forEach(s-> tos.add(mapToTO(s)));
-        return tos;
-    }
-    private GroupTO mapToTO(GroupPE groupPE){
-        GroupTO groupTO = new GroupTO();
-        groupTO.setName(groupPE.getName());
-        groupTO.setId(groupPE.getId());
-        populateMembers(groupPE, groupTO);
-        return groupTO;
-    }
-
-    private void populateMembers(GroupPE groupPE, GroupTO groupTO){
-        groupPE.getMembers().forEach(s->groupTO.getMembers().add(userAS.mapToTO(userRepository.findOne(s))));
+    private void populateMembers(GroupPE groupPE){
+        groupPE.getMemberIds().forEach(s->groupPE.getMembers().add(userRepository.findOne(s)));
     }
 }

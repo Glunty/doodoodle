@@ -3,7 +3,6 @@ package fr.doodoodle.server.service;
 import com.google.api.client.util.Lists;
 import fr.doodoodle.server.db.business.UserRepository;
 import fr.doodoodle.server.db.model.UserPE;
-import fr.doodoodle.server.rest.to.UserTO;
 import fr.doodoodle.server.service.exception.UserAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -50,17 +49,5 @@ public class UserAS {
         } else {
             return Lists.newArrayList();
         }
-    }
-
-    public UserTO mapToTO(UserPE userPE){
-        UserTO userTO = new UserTO();
-        userTO.setId(userPE.getId());
-        userTO.setAccountNotExpired(userPE.getAccountNotExpired());
-        userTO.setEmail(userPE.getEmail());
-        userTO.setFirstName(userPE.getFirstName());
-        userTO.setLastName(userPE.getLastName());
-        userTO.setLastPasswordResetDate(userPE.getLastPasswordResetDate());
-        userTO.setUsername(userPE.getUsername());
-        return  userTO;
     }
 }

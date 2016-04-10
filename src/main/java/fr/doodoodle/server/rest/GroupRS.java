@@ -1,10 +1,8 @@
 package fr.doodoodle.server.rest;
 
 import fr.doodoodle.server.db.business.GroupRepository;
-import fr.doodoodle.server.db.business.UserRepository;
 import fr.doodoodle.server.db.model.GroupPE;
 import fr.doodoodle.server.db.model.UserPE;
-import fr.doodoodle.server.rest.to.GroupTO;
 import fr.doodoodle.server.service.GroupAS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,7 +35,7 @@ public class GroupRS {
     @ResponseStatus(HttpStatus.OK)
     public
     @ResponseBody
-    List<GroupTO> listAll() {
+    List<GroupPE> listAll() {
         return groupAS.listAll();
     }
 
@@ -45,7 +43,7 @@ public class GroupRS {
     @ResponseStatus(HttpStatus.OK)
     public
     @ResponseBody
-    GroupTO findByGroupId(@PathVariable String groupId) {
+    GroupPE findByGroupId(@PathVariable String groupId) {
         return groupAS.findById(groupId);
     }
 
@@ -53,7 +51,7 @@ public class GroupRS {
     @ResponseStatus(HttpStatus.OK)
     public
     @ResponseBody
-    List<GroupTO> findByUserId(@RequestBody UserPE user) {
+    List<GroupPE> findByUserId(@RequestBody UserPE user) {
         return groupAS.listByUserId(user.getId());
     }
 

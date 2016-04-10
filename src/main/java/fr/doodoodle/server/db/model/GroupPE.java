@@ -3,6 +3,7 @@ package fr.doodoodle.server.db.model;
 import com.google.api.client.util.Lists;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -19,9 +20,20 @@ public class GroupPE implements Serializable {
     //Name of user group
     private String name;
     //Reference a list of user id
-    private List<String> members;
+    private List<String> memberIds;
 
-    public List<String> getMembers() {
+    @Transient
+    private List<UserPE> members;
+
+    public List<String> getMemberIds() {
+        if (memberIds == null) {
+            memberIds = Lists.newArrayList();
+        }
+        return memberIds;
+    }
+
+    @Transient
+    public List<UserPE> getMembers() {
         if (members == null) {
             members = Lists.newArrayList();
         }
