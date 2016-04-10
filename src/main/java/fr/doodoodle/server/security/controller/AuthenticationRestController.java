@@ -43,9 +43,6 @@ public class AuthenticationRestController {
 
     @RequestMapping(value = "${jwt.route.authentication.path}", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest, Device device) throws AuthenticationException {
-        System.out.println(authenticationRequest.getEmail());
-        System.out.println(authenticationRequest.getPassword());
-        System.out.println(passwordEncoder.encode(authenticationRequest.getPassword()));
 
         // Perform the security
         final Authentication authentication = authenticationManager.authenticate(
