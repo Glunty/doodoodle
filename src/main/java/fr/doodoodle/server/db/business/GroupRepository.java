@@ -7,10 +7,6 @@ import org.springframework.data.repository.Repository;
 /**
  * Created by Florent on 09/04/2016.
  */
-public interface GroupRepository extends Repository<GroupPE, String> {
-        GroupPE save(GroupPE groupPE);
-
-        GroupPE delete(GroupPE groupPE);
-
-        GroupPE findUniqueById(String id);
+public interface GroupRepository extends CrudRepository<GroupPE, String> {
+        //
 }

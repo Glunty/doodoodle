@@ -1,5 +1,7 @@
 package fr.doodoodle.server.db.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.api.client.util.Lists;
 import lombok.Data;
 import lombok.Singular;
 import org.springframework.data.annotation.Id;
@@ -22,6 +24,7 @@ public class UserPE implements Serializable {
     private String id;
 
     private String username;
+    @JsonIgnore
     private String password;
     private String firstName;
     private String lastName;
@@ -29,10 +32,14 @@ public class UserPE implements Serializable {
     private Boolean accountNotExpired;
     private Date lastPasswordResetDate;
 
-    @Singular
     private List<String> groups;
-    @Singular
     private List<ActivityPE> activities;
-    @Singular
     private List<DisponibilityPE> disponibilities;
+
+    public List<String> getGroups(){
+        if (groups == null){
+            groups = Lists.newArrayList();
+        }
+        return groups;
+    }
 }
