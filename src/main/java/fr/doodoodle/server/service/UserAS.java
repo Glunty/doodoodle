@@ -41,7 +41,7 @@ public class UserAS {
     }
 
     public List<UserPE> findByExample(UserPE example) {
-        if (example.getEmail() != null && example.getFirstName() == null) {
+        if (example.getEmail() != null) {
             return Arrays.asList(userRepository.findFirstByEmail(example.getEmail()));
         }
         if (example.getEmail() == null && example.getFirstName() != null) {
