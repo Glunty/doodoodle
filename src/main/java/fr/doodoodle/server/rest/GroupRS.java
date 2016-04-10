@@ -40,15 +40,15 @@ public class GroupRS {
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     GroupPE findByGroupId(@PathVariable String groupId) {
-        return groupRepository.findOneById(groupId);
+        return groupRepository.findOne(groupId);
     }
 
     @RequestMapping(path = "/{groupId}/addUser", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     void addUserToGroup(@PathVariable String groupId, @RequestBody UserPE user) {
-        GroupPE foundGroup = groupRepository.findOneById(groupId);
-        UserPE foundUser = userRepository.findOneById(user.getId());
+        GroupPE foundGroup = groupRepository.findOne(groupId);
+        UserPE foundUser = userRepository.findOne(user.getId());
         if (foundGroup == null){
             throw new EntityNotFoundException("Group with id "+ groupId+ " not found");
         }
@@ -67,8 +67,8 @@ public class GroupRS {
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     void removeUserFromGroup(@PathVariable String groupId, @RequestBody UserPE user) {
-        GroupPE foundGroup = groupRepository.findOneById(groupId);
-        UserPE foundUser = userRepository.findOneById(user.getId());
+        GroupPE foundGroup = groupRepository.findOne(groupId);
+        UserPE foundUser = userRepository.findOne(user.getId());
         if (foundGroup == null){
             throw new EntityNotFoundException("Group with id "+ groupId+ " not found");
         }
