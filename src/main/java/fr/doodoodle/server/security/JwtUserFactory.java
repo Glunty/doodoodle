@@ -3,6 +3,7 @@ package fr.doodoodle.server.security;
 import fr.doodoodle.server.db.model.UserPE;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import java.util.ArrayList;
 import java.util.List;
 

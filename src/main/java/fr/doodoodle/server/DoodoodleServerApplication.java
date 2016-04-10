@@ -17,7 +17,9 @@ public class DoodoodleServerApplication {
     /*
     * Factory bean that creates the com.mongodb.Mongo instance
     */
-    public @Bean MongoClientFactoryBean mongo() {
+    public
+    @Bean
+    MongoClientFactoryBean mongo() {
         MongoClientFactoryBean mongo = new MongoClientFactoryBean();
         mongo.setHost("localhost");
         mongo.setPort(27017);

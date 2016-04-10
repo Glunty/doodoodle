@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * Created by Thiebaud on 10/04/2016.
  */
@@ -24,38 +26,51 @@ public class GroupRS {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public @ResponseBody
+    public
+    @ResponseBody
     void create(@RequestBody GroupPE groupPE) {
         groupRepository.save(groupPE);
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody
+    public
+    @ResponseBody
     void delete(@RequestBody GroupPE groupPE) {
         groupRepository.delete(groupPE);
     }
 
     @RequestMapping(path = "/{groupId}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody
+    public
+    @ResponseBody
     GroupPE findByGroupId(@PathVariable String groupId) {
         return groupRepository.findOne(groupId);
     }
 
+    @RequestMapping(path = "/findByUser", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public
+    @ResponseBody
+    List<GroupPE> findByUserId(@RequestBody UserPE user) {
+        return groupRepository.listByUserId(user.getId());
+    }
+
+
     @RequestMapping(path = "/{groupId}/addUser", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody
+    public
+    @ResponseBody
     void addUserToGroup(@PathVariable String groupId, @RequestBody UserPE user) {
         GroupPE foundGroup = groupRepository.findOne(groupId);
         UserPE foundUser = userRepository.findOne(user.getId());
-        if (foundGroup == null){
-            throw new EntityNotFoundException("Group with id "+ groupId+ " not found");
+        if (foundGroup == null) {
+            throw new EntityNotFoundException("Group with id " + groupId + " not found");
         }
-        if (foundUser == null){
-            throw new EntityNotFoundException("User with id "+ user.getId()+ " not found");
+        if (foundUser == null) {
+            throw new EntityNotFoundException("User with id " + user.getId() + " not found");
         }
-        if (foundGroup != null && foundUser!= null){
+        if (foundGroup != null && foundUser != null) {
             foundGroup.getMembers().add(foundUser.getId());
             foundUser.getGroups().add(foundGroup.getId());
             groupRepository.save(foundGroup);
@@ -65,17 +80,18 @@ public class GroupRS {
 
     @RequestMapping(path = "/{groupId}/removeUser", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody
+    public
+    @ResponseBody
     void removeUserFromGroup(@PathVariable String groupId, @RequestBody UserPE user) {
         GroupPE foundGroup = groupRepository.findOne(groupId);
         UserPE foundUser = userRepository.findOne(user.getId());
-        if (foundGroup == null){
-            throw new EntityNotFoundException("Group with id "+ groupId+ " not found");
+        if (foundGroup == null) {
+            throw new EntityNotFoundException("Group with id " + groupId + " not found");
         }
-        if (foundUser == null){
-            throw new EntityNotFoundException("User with id "+ user.getId()+ " not found");
+        if (foundUser == null) {
+            throw new EntityNotFoundException("User with id " + user.getId() + " not found");
         }
-        if (foundGroup != null && foundUser!= null){
+        if (foundGroup != null && foundUser != null) {
             foundGroup.getMembers().remove(foundUser.getId());
             foundUser.getGroups().remove(foundGroup.getId());
             groupRepository.save(foundGroup);

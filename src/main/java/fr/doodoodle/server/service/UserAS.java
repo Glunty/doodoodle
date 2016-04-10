@@ -22,11 +22,11 @@ public class UserAS {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserPE createUser(UserPE user){
+    public UserPE createUser(UserPE user) {
         //Search if an existing user has the same email
         UserPE existing = userRepository.findFirstByEmail(user.getEmail());
-        if (existing != null){
-            throw new UserAlreadyExistsException("User with email "+user.getEmail() + " already exists");
+        if (existing != null) {
+            throw new UserAlreadyExistsException("User with email " + user.getEmail() + " already exists");
         }
 
         //We create a new object, taking only authorized fields
@@ -41,13 +41,12 @@ public class UserAS {
     }
 
     public List<UserPE> findByExample(UserPE example) {
-        if (example.getEmail()!=null && example.getFirstName() == null){
+        if (example.getEmail() != null && example.getFirstName() == null) {
             return Arrays.asList(userRepository.findFirstByEmail(example.getEmail()));
         }
-        if (example.getEmail()==null && example.getFirstName()!=null){
+        if (example.getEmail() == null && example.getFirstName() != null) {
             return userRepository.listByFirstAndLastName(example.getFirstName(), example.getLastName());
-        }
-        else {
+        } else {
             return Lists.newArrayList();
         }
     }

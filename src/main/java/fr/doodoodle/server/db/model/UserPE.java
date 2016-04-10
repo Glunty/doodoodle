@@ -3,11 +3,8 @@ package fr.doodoodle.server.db.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.api.client.util.Lists;
 import lombok.Data;
-import lombok.Singular;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -36,8 +33,8 @@ public class UserPE implements Serializable {
     private List<ActivityPE> activities;
     private List<DisponibilityPE> disponibilities;
 
-    public List<String> getGroups(){
-        if (groups == null){
+    public List<String> getGroups() {
+        if (groups == null) {
             groups = Lists.newArrayList();
         }
         return groups;

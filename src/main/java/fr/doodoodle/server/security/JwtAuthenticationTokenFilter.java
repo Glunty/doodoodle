@@ -44,7 +44,7 @@ public class JwtAuthenticationTokenFilter extends UsernamePasswordAuthentication
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
-        
+
         chain.doFilter(request, response);
     }
 }
