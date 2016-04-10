@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.time.Period;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -20,5 +21,7 @@ public class ActivityPE implements Serializable{
     private Period period;
     private String name;
     private ActivityTypePE activityType;
-    private UUID activityGroupUuid;
+    private String ownerID;
+    private List<String> subscribersID;
+    private String activityGroupUuid;
 }
