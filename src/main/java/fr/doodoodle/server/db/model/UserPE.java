@@ -1,6 +1,7 @@
 package fr.doodoodle.server.db.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.api.client.util.Lists;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -21,7 +22,8 @@ public class UserPE implements Serializable {
     private String id;
 
     private String username;
-    @JsonIgnore
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private String firstName;
     private String lastName;
@@ -32,6 +34,7 @@ public class UserPE implements Serializable {
     private List<String> groups;
     private List<ActivityPE> activities;
     private List<DisponibilityPE> disponibilities;
+
 
 
     public List<String> getGroups() {

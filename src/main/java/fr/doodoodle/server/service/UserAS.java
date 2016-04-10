@@ -44,7 +44,7 @@ public class UserAS {
         if (example.getEmail() != null) {
             return Arrays.asList(userRepository.findFirstByEmail(example.getEmail()));
         }
-        if (example.getEmail() == null && example.getFirstName() != null) {
+        if (example.getFirstName() != null) {
             return userRepository.listByFirstAndLastName(example.getFirstName(), example.getLastName());
         } else {
             return Lists.newArrayList();
