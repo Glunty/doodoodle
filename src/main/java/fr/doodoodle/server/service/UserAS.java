@@ -1,10 +1,10 @@
 package fr.doodoodle.server.service;
 
 import com.google.api.client.util.Lists;
+import com.google.api.client.util.Strings;
 import fr.doodoodle.server.db.business.UserRepository;
 import fr.doodoodle.server.db.model.UserPE;
 import fr.doodoodle.server.service.exception.UserAlreadyExistsException;
-import fr.doodoodle.server.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -57,7 +57,7 @@ public class UserAS {
     }
 
     public UserPE updateUser(UserPE user) {
-        if(!StringUtils.isNullOrEmpty(user.getId())){
+        if(!Strings.isNullOrEmpty(user.getId())){
             return userRepository.save(user);
         }
         return null;

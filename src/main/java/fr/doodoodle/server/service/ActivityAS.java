@@ -1,10 +1,10 @@
 package fr.doodoodle.server.service;
 
+import com.google.api.client.util.Strings;
 import fr.doodoodle.server.db.business.ActivityRepository;
 import fr.doodoodle.server.db.model.ActivityPE;
 import fr.doodoodle.server.db.model.UserPE;
 import fr.doodoodle.server.service.exception.EntityNotFoundException;
-import fr.doodoodle.server.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ public class ActivityAS {
 
     public void createActivity(ActivityPE activityPE){
         //if activity does not have an activity group id, we generate one
-        if(StringUtils.isNullOrEmpty(activityPE.getActivityGroupUuid())) {
+        if(Strings.isNullOrEmpty(activityPE.getActivityGroupUuid())) {
             activityPE.setActivityGroupUuid(UUID.randomUUID().toString());
         }
         UserPE user = userAS.findByID(activityPE.getOwnerID());
