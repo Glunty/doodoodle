@@ -2,6 +2,8 @@ package fr.doodoodle.server.service;
 
 import fr.doodoodle.server.db.business.ActivityRepository;
 import fr.doodoodle.server.db.model.ActivityPE;
+import fr.doodoodle.server.db.model.UserPE;
+import fr.doodoodle.server.service.exception.EntityNotFoundException;
 import fr.doodoodle.server.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,14 @@ public class ActivityAS {
         if(StringUtils.isNullOrEmpty(activityPE.getActivityGroupUuid())) {
             activityPE.setActivityGroupUuid(UUID.randomUUID().toString());
         }
-        activityRepository.save(activityPE);
+        UserPE user = userAS.findByID(activityPE.getOwnerID());
+        user.getActivities().add(activityPE.getId());
+
+        //we check that the user creating this activity exist, and we add to it this activity
+        if(userAS.updateUser(user) != null) {
+            activityRepository.save(activityPE);
+        } else {
+            throw new EntityNotFoundException("User with id :"+activityPE.getOwnerID()+" not found");
+        }
     }
 }

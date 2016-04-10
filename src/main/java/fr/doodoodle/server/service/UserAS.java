@@ -4,6 +4,7 @@ import com.google.api.client.util.Lists;
 import fr.doodoodle.server.db.business.UserRepository;
 import fr.doodoodle.server.db.model.UserPE;
 import fr.doodoodle.server.service.exception.UserAlreadyExistsException;
+import fr.doodoodle.server.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,10 @@ public class UserAS {
         return userRepository.save(newUser);
     }
 
+    public UserPE findByID(String id){
+        return userRepository.findOne(id);
+    }
+
     public List<UserPE> findByExample(UserPE example) {
         if (example.getEmail() != null && example.getFirstName() == null) {
             return Arrays.asList(userRepository.findFirstByEmail(example.getEmail()));
@@ -49,5 +54,12 @@ public class UserAS {
         } else {
             return Lists.newArrayList();
         }
+    }
+
+    public UserPE updateUser(UserPE user) {
+        if(!StringUtils.isNullOrEmpty(user.getId())){
+            return userRepository.save(user);
+        }
+        return null;
     }
 }

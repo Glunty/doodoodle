@@ -29,9 +29,16 @@ public class UserPE implements Serializable {
     private Boolean accountNotExpired;
     private Date lastPasswordResetDate;
     private List<String> groups;
-    List<ActivityTypePE> activityTypes;
-    private List<ActivityPE> activities;
-    private List<DisponibilityPE> disponibilities;
+    private List<ActivityTypePE> activityTypes;
+    private List<String> activities;
+    private List<DisponibilityPE> availabilities;
+
+    public List<String> getActivities(){
+        if (activities == null){
+            activities = Lists.newArrayList();
+        }
+        return activities;
+    }
 
     public List<String> getGroups() {
         if (groups == null) {

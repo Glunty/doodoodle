@@ -20,6 +20,14 @@ public class GroupPE implements Serializable {
     private String name;
     //Reference a list of user id
     private List<String> members;
+    private List<ActivityTypePE> activityTypes;
+
+    public List<ActivityTypePE> getActivityTypes(){
+        if(activityTypes == null){
+            activityTypes = Lists.newArrayList();
+        }
+        return activityTypes;
+    }
 
     public List<String> getMembers() {
         if (members == null) {
