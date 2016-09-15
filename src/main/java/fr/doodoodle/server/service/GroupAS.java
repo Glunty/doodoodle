@@ -24,9 +24,6 @@ public class GroupAS {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private UserAS userAS;
-
     public void removeUserFromGroup(String groupId, String userId) {
         GroupPE foundGroup = groupRepository.findOne(groupId);
         UserPE foundUser = userRepository.findOne(userId);
@@ -56,6 +53,18 @@ public class GroupAS {
         groupRepository.save(foundGroup);
         userRepository.save(foundUser);
     }
+    
+	/**
+	 * A new group is created by a user
+	 * User is added to the group
+	 * @param groupPE
+	 * @param username
+	 */
+	public void createGroup(GroupPE groupPE, String username) {
+		UserPE user = userRepository.findByUsername(username);
+		groupPE.getMemberIds().add(user.getId());
+		groupRepository.save(groupPE);
+	}
 
 
     public GroupPE findById(String groupId) {
@@ -95,4 +104,6 @@ public class GroupAS {
     private void populateMembers(GroupPE groupPE) {
         groupPE.getMemberIds().forEach(s -> groupPE.getMembers().add(userRepository.findOne(s)));
     }
+
+
 }

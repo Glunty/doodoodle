@@ -1,16 +1,17 @@
 package fr.doodoodle.server.service;
 
-import com.google.api.client.util.Lists;
-import fr.doodoodle.server.db.business.UserRepository;
-import fr.doodoodle.server.db.model.UserPE;
-import fr.doodoodle.server.service.exception.UserAlreadyExistsException;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import com.google.api.client.util.Lists;
+
+import fr.doodoodle.server.db.business.UserRepository;
+import fr.doodoodle.server.db.model.UserPE;
+import fr.doodoodle.server.service.exception.UserAlreadyExistsException;
 
 /**
  * Created by Florent on 09/04/2016.

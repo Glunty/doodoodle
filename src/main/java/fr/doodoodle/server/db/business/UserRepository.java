@@ -19,4 +19,7 @@ public interface UserRepository extends CrudRepository<UserPE, String> {
 
     @Query("{ 'firstName' : ?0, 'lastName' : ?1 }")
     List<UserPE> listByFirstAndLastName(String firstName, String lastName);
+    
+    @Query("{ 'username' : ?0 }")
+    UserPE findByUsername(String username);
 }

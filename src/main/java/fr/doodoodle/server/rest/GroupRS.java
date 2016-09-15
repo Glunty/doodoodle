@@ -21,9 +21,6 @@ import java.util.List;
 public class GroupRS {
 
     @Autowired
-    private GroupRepository groupRepository;
-
-    @Autowired
     private GroupAS groupAS;
 
     @Autowired
@@ -36,8 +33,10 @@ public class GroupRS {
     @ResponseStatus(HttpStatus.CREATED)
     public
     @ResponseBody
-    void create(@RequestBody GroupPE groupPE) {
-        groupRepository.save(groupPE);
+    void create(@RequestBody GroupPE groupPE, HttpServletRequest request) {
+        String token = request.getHeader(tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        groupAS.createGroup(groupPE, username);
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -88,6 +87,7 @@ public class GroupRS {
     public void removeCurrentUserFromGroup(@PathVariable String groupId, HttpServletRequest request) {
         String token = request.getHeader(tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(token);
+        //FIXME TSR Username provided where userId is expected => cannot work
         groupAS.removeUserFromGroup(groupId, username);
     }
 }

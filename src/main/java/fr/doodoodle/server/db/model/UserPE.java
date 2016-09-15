@@ -1,17 +1,17 @@
 package fr.doodoodle.server.db.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.api.client.util.Lists;
-import com.google.api.client.util.Sets;
-import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.api.client.util.Sets;
+
+import lombok.Data;
 
 /**
  * Created by Florent on 09/04/2016.
