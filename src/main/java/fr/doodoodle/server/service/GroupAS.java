@@ -79,8 +79,9 @@ public class GroupAS {
         return groups;
     }
 
-    public List<GroupPE> listAll() {
-        Iterable<GroupPE> groups = groupRepository.findAll();
+    public List<GroupPE> listAll(String username) {
+    	UserPE currentUser = userRepository.findByUsername(username);
+        Iterable<GroupPE> groups = groupRepository.listByUserId(currentUser.getId());
         groups.forEach(s -> populateMembers(s));
         return Lists.newArrayList(groups);
     }

@@ -43,8 +43,10 @@ public class GroupRS {
     @ResponseStatus(HttpStatus.OK)
     public
     @ResponseBody
-    List<GroupPE> listAll() {
-        return groupAS.listAll();
+    List<GroupPE> listAll(HttpServletRequest request) {
+        String token = request.getHeader(tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        return groupAS.listAll(username);
     }
 
     @RequestMapping(path = "/{groupId}", method = RequestMethod.GET)
