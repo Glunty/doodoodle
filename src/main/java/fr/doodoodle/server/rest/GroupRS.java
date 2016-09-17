@@ -56,7 +56,7 @@ public class GroupRS {
     }
 
     @RequestMapping(path = "/{groupId}/user", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     public void addUser(@PathVariable String groupId, @RequestBody UserPE user) {
         groupAS.addUserToGroup(groupId, user.getUsername());
