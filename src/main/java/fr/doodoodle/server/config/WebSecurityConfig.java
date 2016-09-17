@@ -2,7 +2,9 @@ package fr.doodoodle.server.config;
 
 import fr.doodoodle.server.security.JwtAuthenticationEntryPoint;
 import fr.doodoodle.server.security.JwtAuthenticationTokenFilter;
+import fr.doodoodle.server.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,11 +29,23 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private JwtAuthenticationEntryPoint unauthorizedHandler;
+    private final JwtAuthenticationEntryPoint unauthorizedHandler;
+
+    private final JwtTokenUtil jwtTokenUtil;
+
+    private final UserDetailsService userDetailsService;
+
+    @Value("${jwt.header}")
+    private String tokenHeader;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    public WebSecurityConfig(JwtAuthenticationEntryPoint unauthorizedHandler,
+                             JwtTokenUtil jwtTokenUtil,
+                             UserDetailsService userDetailsService) {
+        this.unauthorizedHandler = unauthorizedHandler;
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.userDetailsService = userDetailsService;
+    }
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
@@ -58,16 +72,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder());
     }
 
-
-    @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
-    @Bean
-    public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
-        JwtAuthenticationTokenFilter authenticationTokenFilter = new JwtAuthenticationTokenFilter();
+    public JwtAuthenticationTokenFilter authenticationTokenFilter(JwtTokenUtil jwtTokenUtil,
+                                                                      UserDetailsService userDetailsService) throws Exception {
+        JwtAuthenticationTokenFilter authenticationTokenFilter
+                = new JwtAuthenticationTokenFilter(jwtTokenUtil, userDetailsService, tokenHeader);
         authenticationTokenFilter.setAuthenticationManager(authenticationManagerBean());
         return authenticationTokenFilter;
     }
@@ -104,7 +117,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Custom JWT based security filter
         httpSecurity
-                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(authenticationTokenFilter(this.jwtTokenUtil, this.userDetailsService),
+                        UsernamePasswordAuthenticationFilter.class);
 
         // disable page caching
         httpSecurity.headers().cacheControl();

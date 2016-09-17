@@ -3,24 +3,25 @@ package fr.doodoodle.server.service;
 import com.google.api.client.util.Lists;
 import fr.doodoodle.server.db.business.UserRepository;
 import fr.doodoodle.server.db.model.UserPE;
+import fr.doodoodle.server.service.exception.EntityNotFoundException;
 import fr.doodoodle.server.service.exception.UserAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Florent on 09/04/2016.
- */
 @Service
 public class UserAS {
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UserAS(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public UserPE createUser(UserPE user) {
         //Search if an existing user has the same email
@@ -49,5 +50,13 @@ public class UserAS {
         } else {
             return Lists.newArrayList();
         }
+    }
+
+    public UserPE findByUsername(String username) {
+        UserPE foundUser = userRepository.findFirstByUsername(username);
+        if (foundUser == null) {
+            throw new EntityNotFoundException("User with id " + username + " not found");
+        }
+        return foundUser;
     }
 }

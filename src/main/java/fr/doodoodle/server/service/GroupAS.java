@@ -11,30 +11,36 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
-/**
- * Created by Thiebaud on 10/04/2016.
- */
 @Service
 public class GroupAS {
 
-    @Autowired
-    private GroupRepository groupRepository;
+    private final GroupRepository groupRepository;
+
+    private final UserRepository userRepository;
+
+    private final UserAS userService;
 
     @Autowired
-    private UserRepository userRepository;
+    public GroupAS(GroupRepository groupRepository, UserRepository userRepository, UserAS userService) {
+        this.groupRepository = groupRepository;
+        this.userRepository = userRepository;
+        this.userService = userService;
+    }
 
-    @Autowired
-    private UserAS userAS;
+    public void createUserGroup(String username, GroupPE groupPE) {
+        UserPE foundUser = userService.findByUsername(username);
+        groupPE.getMemberIds().add(foundUser.getId());
+        groupRepository.save(groupPE);
+    }
 
-    public void removeUserFromGroup(String groupId, String userId) {
+    public void removeUserFromGroup(String groupId, String username) {
         GroupPE foundGroup = groupRepository.findOne(groupId);
-        UserPE foundUser = userRepository.findOne(userId);
+        UserPE foundUser = userService.findByUsername(username);
         if (foundGroup == null) {
             throw new EntityNotFoundException("Group with id " + groupId + " not found");
         }
         if (foundUser == null) {
-            throw new EntityNotFoundException("User with id " + userId + " not found");
+            throw new EntityNotFoundException("User with id " + username + " not found");
         }
         foundGroup.getMemberIds().remove(foundUser.getId());
         foundUser.getGroups().remove(foundGroup.getId());
@@ -48,9 +54,9 @@ public class GroupAS {
         }
     }
 
-    public void addUserToGroup(String groupId, String userId) {
+    public void addUserToGroup(String groupId, String username) {
         GroupPE foundGroup = findGroup(groupId);
-        UserPE foundUser = findUser(userId);
+        UserPE foundUser = userService.findByUsername(username);
         foundGroup.getMemberIds().add(foundUser.getId());
         foundUser.getGroups().add(foundGroup.getId());
         groupRepository.save(foundGroup);
@@ -64,24 +70,17 @@ public class GroupAS {
         return group;
     }
 
-    public List<GroupPE> listByUserId(String id) {
-        List<GroupPE> groups = groupRepository.listByUserId(id);
-        groups.forEach(s -> populateMembers(s));
+    public List<GroupPE> listByUsername(String username) {
+        UserPE foundUser = userService.findByUsername(username);
+        List<GroupPE> groups = groupRepository.listByUserId(foundUser.getId());
+        groups.forEach(this::populateMembers);
         return groups;
     }
 
     public List<GroupPE> listAll() {
         Iterable<GroupPE> groups = groupRepository.findAll();
-        groups.forEach(s -> populateMembers(s));
+        groups.forEach(this::populateMembers);
         return Lists.newArrayList(groups);
-    }
-
-    private UserPE findUser(String userId) {
-        UserPE foundUser = userRepository.findOne(userId);
-        if (foundUser == null) {
-            throw new EntityNotFoundException("User with id " + userId + " not found");
-        }
-        return foundUser;
     }
 
     private GroupPE findGroup(String groupId) {

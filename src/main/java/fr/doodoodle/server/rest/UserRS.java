@@ -8,17 +8,19 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Created by Florent on 09/04/2016.
- */
 @RestController
 @RequestMapping("/user")
 public class UserRS {
+
+    private final UserAS userAS;
+
     @Autowired
-    private UserAS userAS;
+    public UserRS(UserAS userAS) {
+        this.userAS = userAS;
+    }
 
     @RequestMapping(method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public
     @ResponseBody
     void create(@RequestBody UserPE user) {
@@ -29,7 +31,7 @@ public class UserRS {
     @ResponseStatus(HttpStatus.CREATED)
     public
     @ResponseBody
-    List<UserPE> findUser(@RequestBody UserPE example) {
+    List<UserPE> find(@RequestBody UserPE example) {
         return userAS.findByExample(example);
     }
 

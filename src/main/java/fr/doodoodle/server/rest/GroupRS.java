@@ -13,79 +13,67 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-/**
- * Created by Thiebaud on 10/04/2016.
- */
 @RestController
 @RequestMapping("/group")
 public class GroupRS {
 
-    @Autowired
-    private GroupRepository groupRepository;
+    private final GroupAS groupAS;
 
-    @Autowired
-    private GroupAS groupAS;
-
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @Value("${jwt.header}")
     private String tokenHeader;
 
+    @Autowired
+    public GroupRS(GroupRepository groupRepository, GroupAS groupAS, JwtTokenUtil jwtTokenUtil) {
+        this.groupAS = groupAS;
+        this.jwtTokenUtil = jwtTokenUtil;
+    }
+
     @RequestMapping(method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.CREATED)
-    public
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    void create(@RequestBody GroupPE groupPE) {
-        groupRepository.save(groupPE);
+    public void create(@RequestBody GroupPE groupPE, HttpServletRequest request) {
+        String token = request.getHeader(tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        groupAS.createUserGroup(username, groupPE);
     }
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public
     @ResponseBody
-    List<GroupPE> listAll() {
-        return groupAS.listAll();
+    public List<GroupPE> find(@RequestParam(value = "username", required = false) String username,
+                                 HttpServletRequest request) {
+        String token = request.getHeader(tokenHeader);
+        return groupAS.listByUsername(username == null ? jwtTokenUtil.getUsernameFromToken(token) : username);
     }
 
     @RequestMapping(path = "/{groupId}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public
     @ResponseBody
-    GroupPE findByGroupId(@PathVariable String groupId) {
+    public GroupPE findById(@PathVariable String groupId) {
         return groupAS.findById(groupId);
     }
 
-    @RequestMapping(path = "/findByUser", method = RequestMethod.POST)
+    @RequestMapping(path = "/{groupId}/user", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public
     @ResponseBody
-    List<GroupPE> findByUserId(@RequestBody UserPE user) {
-        return groupAS.listByUserId(user.getId());
+    public void addUser(@PathVariable String groupId, @RequestBody UserPE user) {
+        groupAS.addUserToGroup(groupId, user.getUsername());
     }
 
-
-    @RequestMapping(path = "/{groupId}/addUser", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
-    public
-    @ResponseBody
-    void addUserToGroup(@PathVariable String groupId, @RequestBody UserPE user) {
-        groupAS.addUserToGroup(groupId, user.getId());
-    }
-
-    @RequestMapping(path = "/{groupId}/removeUser", method = RequestMethod.POST)
+    @RequestMapping(path = "/{groupId}/user/{username}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     //authorize only a given user to remove itself
     //@PreAuthorize("authentication.principal.equals(#user.getEmail())")
-    public
     @ResponseBody
-    void removeUserFromGroup(@PathVariable String groupId, @RequestBody UserPE user) {
-        groupAS.removeUserFromGroup(groupId, user.getId());
+    public void removeUser(@PathVariable String groupId, @PathVariable String username) {
+        groupAS.removeUserFromGroup(groupId, username);
     }
 
     @RequestMapping(value = "/{groupId}", method = RequestMethod.DELETE)
-    @ResponseStatus(HttpStatus.OK)
-    public void removeCurrentUserFromGroup(@PathVariable String groupId, HttpServletRequest request) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeCurrentUser(@PathVariable String groupId, HttpServletRequest request) {
         String token = request.getHeader(tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(token);
         groupAS.removeUserFromGroup(groupId, username);

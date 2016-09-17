@@ -11,9 +11,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Created by Florent on 09/04/2016.
- */
 @Document(collection = "groups")
 @Data
 public class GroupPE implements Serializable {
