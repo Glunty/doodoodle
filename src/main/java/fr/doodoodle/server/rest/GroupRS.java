@@ -8,10 +8,13 @@ import fr.doodoodle.server.service.GroupAS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.acl.Group;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/group")
@@ -56,19 +59,22 @@ public class GroupRS {
     }
 
     @RequestMapping(path = "/{groupId}/user", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void addUser(@PathVariable String groupId, @RequestBody UserPE user) {
-        groupAS.addUserToGroup(groupId, user.getUsername());
+    public GroupPE addUser(@PathVariable String groupId, @RequestBody UserPE user) {
+        return groupAS.addUserToGroup(groupId, user.getUsername());
     }
 
-    @RequestMapping(path = "/{groupId}/user/{username}", method = RequestMethod.DELETE)
-    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(path = "/{groupId}/user/{username:.+}", method = RequestMethod.DELETE)
     //authorize only a given user to remove itself
     //@PreAuthorize("authentication.principal.equals(#user.getEmail())")
-    @ResponseBody
-    public void removeUser(@PathVariable String groupId, @PathVariable String username) {
-        groupAS.removeUserFromGroup(groupId, username);
+    public ResponseEntity<GroupPE> removeUser(@PathVariable String groupId, @PathVariable String username) {
+        final Optional<GroupPE> group = groupAS.removeUserFromGroup(groupId, username);
+        if(group.isPresent()) {
+            return new ResponseEntity<>(group.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
     }
 
     @RequestMapping(value = "/{groupId}", method = RequestMethod.DELETE)

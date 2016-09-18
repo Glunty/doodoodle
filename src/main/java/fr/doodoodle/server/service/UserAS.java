@@ -55,7 +55,7 @@ public class UserAS {
     public UserPE findByUsername(String username) {
         UserPE foundUser = userRepository.findFirstByUsername(username);
         if (foundUser == null) {
-            throw new EntityNotFoundException("User with id " + username + " not found");
+            throw new EntityNotFoundException("User with username " + username + " not found");
         }
         return foundUser;
     }

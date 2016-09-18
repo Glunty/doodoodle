@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GroupAS {
@@ -33,15 +34,9 @@ public class GroupAS {
         groupRepository.save(groupPE);
     }
 
-    public void removeUserFromGroup(String groupId, String username) {
-        GroupPE foundGroup = groupRepository.findOne(groupId);
+    public Optional<GroupPE> removeUserFromGroup(String groupId, String username) {
+        GroupPE foundGroup = findGroup(groupId);
         UserPE foundUser = userService.findByUsername(username);
-        if (foundGroup == null) {
-            throw new EntityNotFoundException("Group with id " + groupId + " not found");
-        }
-        if (foundUser == null) {
-            throw new EntityNotFoundException("User with id " + username + " not found");
-        }
         foundGroup.getMemberIds().remove(foundUser.getId());
         foundUser.getGroups().remove(foundGroup.getId());
 
@@ -49,18 +44,21 @@ public class GroupAS {
         if (foundGroup.getMemberIds().isEmpty()) {
             //Delete group if last member has quit
             groupRepository.delete(foundGroup);
+            return Optional.empty();
         } else {
-            groupRepository.save(foundGroup);
+            return Optional.of(groupRepository.save(foundGroup));
         }
     }
 
-    public void addUserToGroup(String groupId, String username) {
+    public GroupPE addUserToGroup(String groupId, String username) {
         GroupPE foundGroup = findGroup(groupId);
         UserPE foundUser = userService.findByUsername(username);
         foundGroup.getMemberIds().add(foundUser.getId());
         foundUser.getGroups().add(foundGroup.getId());
-        groupRepository.save(foundGroup);
         userRepository.save(foundUser);
+        final GroupPE newGroup = groupRepository.save(foundGroup);
+        populateMembers(newGroup);
+        return newGroup;
     }
 
 
