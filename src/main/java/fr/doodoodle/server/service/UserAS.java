@@ -34,6 +34,8 @@ public class UserAS {
         UserPE newUser = new UserPE();
         newUser.setUsername(user.getEmail());
         newUser.setEmail(user.getEmail());
+        newUser.setFirstName(user.getFirstName());
+        newUser.setLastName(user.getLastName());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         newUser.setLastPasswordResetDate(new Date());
         newUser.setAccountNotExpired(true);
